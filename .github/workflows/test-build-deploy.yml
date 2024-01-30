@@ -1,0 +1,31 @@
+
+name: test-build-deploy
+run-name: Build transcode project into a docker image
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
+        with:
+          role-to-assume: arn:aws:iam::023231733398:role/my-transcoding-example-ecs-instance-role
+          aws-region: eu-north-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Start the docker image
+        run: |
+          docker run --name local-stack-test -d 023231733398.dkr.ecr.eu-north-1.amazonaws.com/my-transcoding-example-test-image:main
+          sleep 10 # Give some time for the container to start
