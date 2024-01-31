@@ -1,9 +1,7 @@
 package thumbnails
 
 import (
-	"fmt"
 	"github.com/gofor-little/env"
-	"os"
 	"testing"
 )
 
@@ -18,10 +16,7 @@ func init() {
 func TestExtractThumbs_CreateThumbs(t *testing.T) {
 	var extractThumbs ExtractThumbs
 
-	outputPath := fmt.Sprintf("%s/output", os.Getenv("LOCAL_STORAGE_PATH"))
-	inputFilePath := fmt.Sprintf("%s/sample_test.mp4", os.Getenv("LOCAL_STORAGE_PATH"))
-
-	err := extractThumbs.CreateThumbs(inputFilePath, outputPath)
+	err := extractThumbs.CreateThumbs("../../resources/test/sample_test.mp4", "../../resources/test/output")
 
 	if err != nil {
 		t.Fatalf("Error while extracting images err: %v", err)

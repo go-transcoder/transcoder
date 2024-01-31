@@ -1,7 +1,6 @@
 package ffmpeg
 
 import (
-	"fmt"
 	"github.com/gofor-little/env"
 	"os"
 	"testing"
@@ -18,10 +17,9 @@ func init() {
 func TestFfmpegApi_FfmpegCommandExec(t *testing.T) {
 	var ffmpegApi CommandExec
 
-	outputPath := fmt.Sprintf("%s/output", os.Getenv("LOCAL_STORAGE_PATH"))
-	inputFilePath := fmt.Sprintf("%s/sample_test.mp4", os.Getenv("LOCAL_STORAGE_PATH"))
+	outputPath := "../../resources/test/output"
 
-	err := ffmpegApi.FfmpegCommandExec(inputFilePath, outputPath)
+	err := ffmpegApi.FfmpegCommandExec("../../resources/app/convert_video_cpu.sh", "../../resources/test/sample_test.mp4", outputPath)
 
 	if err != nil {
 		t.Fatalf("ffmpegCommandExec error: , %v", err)

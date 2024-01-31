@@ -1,9 +1,7 @@
 package smil
 
 import (
-	"fmt"
 	"github.com/gofor-little/env"
-	"os"
 	"testing"
 )
 
@@ -18,9 +16,7 @@ func init() {
 func TestSmil_createSmilFile(t *testing.T) {
 	var f CreateSmilFile
 
-	outputPath := fmt.Sprintf("%s/output", os.Getenv("LOCAL_STORAGE_PATH"))
-
-	err := f.CreateSmilFile(outputPath)
+	err := f.CreateSmilFile("../../resources/test/output")
 
 	if err != nil {
 		t.Fatalf("Error while creating smil file err: %v", err)

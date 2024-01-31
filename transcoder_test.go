@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gofor-little/env"
-	"os"
 	"testing"
 )
 
@@ -17,12 +15,9 @@ func init() {
 
 func TestTranscoder_transcode(t *testing.T) {
 
-	outputPath := fmt.Sprintf("%s/output/transcoded", os.Getenv("LOCAL_STORAGE_PATH"))
-	inputFilePath := fmt.Sprintf("%s/sample_test.mp4", os.Getenv("LOCAL_STORAGE_PATH"))
-
 	transcoder := transcoder{
-		InputFile: inputFilePath,
-		OutputDir: outputPath,
+		InputFile: "./resources/test/sample_test.mp4",
+		OutputDir: "./resources/test/output/transcoded",
 	}
 
 	err := transcoder.transcode()

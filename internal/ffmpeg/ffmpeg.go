@@ -3,16 +3,15 @@ package ffmpeg
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
 )
 
 type CommandExec func(cv, inputFile, outputDir string) error
 
-func (ffmpegApi CommandExec) FfmpegCommandExec(inputFile, outputDir string) error {
+func (ffmpegApi CommandExec) FfmpegCommandExec(ffmpegCommandPath, inputFile, outputDir string) error {
 	cmd := exec.Command(
 		"/bin/bash",
-		os.Getenv("CONVERT_FFMPEG_SCRIPT_PATH"),
+		ffmpegCommandPath,
 		inputFile,
 		outputDir,
 	)
