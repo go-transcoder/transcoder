@@ -35,6 +35,9 @@ jobs:
         with:
           go-version: '1.21.5'
 
+      - name: add ffmpeg to CI
+        uses: FedericoCarboni/setup-ffmpeg@v3
+
       - name: Build
         run: go build -v .
 
