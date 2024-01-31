@@ -49,7 +49,7 @@ func TestS3BucketApi_DownloadFile(t *testing.T) {
 		BucketName: os.Getenv("INPUT_S3_BUCKET"),
 	}
 
-	downloadedFilePath := fmt.Sprintf("%s/%s", os.Getenv("LOCAL_STORAGE_PATH"), os.Getenv("OBJECT_NAME"))
+	downloadedFilePath := fmt.Sprintf("../../resources/test/%s", os.Getenv("OBJECT_NAME"))
 
 	err = s3BucketApi.DownloadFile("uploads/sample-test.mp4", downloadedFilePath)
 
