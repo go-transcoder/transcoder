@@ -32,7 +32,7 @@ func (transcoder transcoder) transcode() error {
 	go func() {
 		defer wg.Done()
 		var ffmpegApi ffmpeg.CommandExec
-		err := ffmpegApi.FfmpegCommandExec("libx264", transcoder.InputFile, transcoder.OutputDir)
+		err := ffmpegApi.FfmpegCommandExec(transcoder.InputFile, transcoder.OutputDir)
 
 		if err != nil {
 			fmt.Printf("error while executing ffmpeg command: %v", err)

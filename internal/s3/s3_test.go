@@ -2,6 +2,7 @@ package s3
 
 import (
 	"context"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/gofor-little/env"
@@ -9,12 +10,15 @@ import (
 	"testing"
 )
 
-func TestS3BucketApi_UploadVideoDir(t *testing.T) {
+func init() {
+	// Set environment variables here
 	// Load an .env file and set the key-value pairs as environment variables.
-	if err := env.Load("/home/namir/Projects/my-transcoding/projects/.env.test"); err != nil {
+	if err := env.Load("../../.env.test"); err != nil {
 		panic(err)
 	}
+}
 
+func TestS3BucketApi_UploadVideoDir(t *testing.T) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 
 	if err != nil {
@@ -28,15 +32,10 @@ func TestS3BucketApi_UploadVideoDir(t *testing.T) {
 		BucketName: os.Getenv("INPUT_S3_BUCKET"),
 	}
 
-	s3BucketApi.UploadVideoDir("/home/namir/Projects/my-transcoding/projects/uploads/transcoder/sample_test_cousa", "transcoded")
+	s3BucketApi.UploadVideoDir("../../resources/test", "transcoded")
 }
 
 func TestS3BucketApi_DownloadFile(t *testing.T) {
-	// Load an .env file and set the key-value pairs as environment variables.
-	if err := env.Load("/home/namir/Projects/my-transcoding/projects/.env.test"); err != nil {
-		panic(err)
-	}
-
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 
 	if err != nil {
@@ -50,7 +49,8 @@ func TestS3BucketApi_DownloadFile(t *testing.T) {
 		BucketName: os.Getenv("INPUT_S3_BUCKET"),
 	}
 
-	downloadedFilePath := os.Getenv("UPLOADER_APP_UPLOAD_PATH") + "/transcoder/" + os.Getenv("OBJECT_NAME")
+	downloadedFilePath := fmt.Sprintf("%s/%s", os.Getenv("LOCAL_STORAGE_PATH"), os.Getenv("OBJECT_NAME"))
+
 	err = s3BucketApi.DownloadFile("uploads/sample-test.mp4", downloadedFilePath)
 
 	_, err = os.Stat(downloadedFilePath)

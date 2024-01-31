@@ -9,13 +9,12 @@ import (
 
 type CommandExec func(cv, inputFile, outputDir string) error
 
-func (ffmpegApi CommandExec) FfmpegCommandExec(cv, inputFile, outputDir string) error {
+func (ffmpegApi CommandExec) FfmpegCommandExec(inputFile, outputDir string) error {
 	cmd := exec.Command(
 		"/bin/bash",
 		os.Getenv("CONVERT_FFMPEG_SCRIPT_PATH"),
 		inputFile,
 		outputDir,
-		cv,
 	)
 	// Create buffers to capture output
 	var stdout, stderr bytes.Buffer
