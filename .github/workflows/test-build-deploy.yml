@@ -79,5 +79,5 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: my-transcoding-example-transcoding
         run: |
-          docker build -f Dockerfile -t $REGISTRY/$REPOSITORY:main .
+          docker build -f docker/Dockerfile -t $REGISTRY/$REPOSITORY:main .
           docker push $REGISTRY/$REPOSITORY:main
