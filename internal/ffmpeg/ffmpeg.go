@@ -10,7 +10,7 @@ type CommandExec func(cv, inputFile, outputDir string) error
 
 func (ffmpegApi CommandExec) FfmpegCommandExec(ffmpegCommandPath, inputFile, outputDir string) error {
 	cmd := exec.Command(
-		"/bin/bash",
+		"/bin/sh",
 		ffmpegCommandPath,
 		inputFile,
 		outputDir,

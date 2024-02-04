@@ -8,6 +8,7 @@ import (
 	s3_internal "github.com/go-transcoder/transcoder/internal/s3"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 		BucketName: os.Getenv("INPUT_S3_BUCKET"),
 	}
 
-	objectPath := os.Getenv("UPLOADER_APP_UPLOAD_PATH") + "/" + os.Getenv("OBJECT_NAME")
+	objectPath := os.Getenv("STORAGE_PATH") + "/" + os.Getenv("OBJECT_NAME")
 
 	// download the video
 	// path of the video that it will be downloaded to
@@ -33,9 +34,14 @@ func main() {
 		fmt.Printf("Error while Downloading err: %v", err)
 	}
 
+	// setting the output dir from file name
+	parts := strings.Split(os.Getenv("OBJECT_NAME"), ".")
+	outputDir := parts[0]
+	outputDir = fmt.Sprintf("%s/%s", os.Getenv("STORAGE_PATH"), outputDir)
+
 	transcoderApi := transcoder{
 		InputFile: objectPath,
-		OutputDir: fmt.Sprintf("/tmp/%s", os.Getenv("OBJECT_NAME")),
+		OutputDir: outputDir,
 	}
 
 	// transcode the video
@@ -44,5 +50,7 @@ func main() {
 	if err != nil {
 		fmt.Printf("Error while transcoding err: %v", err)
 	}
+
 	// upload back to s3
+	err = s3BucketApi.UploadVideoDir(outputDir, "videos")
 }

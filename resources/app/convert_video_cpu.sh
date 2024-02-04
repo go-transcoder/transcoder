@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 file=$1     #full video path on storage: tenant_folder/uploads/file_name_of_video.mp4
 path=$2     #full path where to convert different quality of video: tenant_folder/uploads/file_name_of_video/
 ffmpeg_cv="libx264"
