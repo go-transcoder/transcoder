@@ -36,8 +36,8 @@ func main() {
 
 	// setting the output dir from file name
 	parts := strings.Split(os.Getenv("OBJECT_NAME"), ".")
-	outputDir := parts[0]
-	outputDir = fmt.Sprintf("%s/%s", os.Getenv("STORAGE_PATH"), outputDir)
+	outputDir := fmt.Sprintf("%s/%s", os.Getenv("STORAGE_PATH"), parts[0])
+	s3Dir := fmt.Sprintf("videos/%s", parts[0])
 
 	transcoderApi := transcoder{
 		InputFile: objectPath,
@@ -52,5 +52,5 @@ func main() {
 	}
 
 	// upload back to s3
-	err = s3BucketApi.UploadVideoDir(outputDir, "videos")
+	err = s3BucketApi.UploadVideoDir(outputDir, s3Dir)
 }
