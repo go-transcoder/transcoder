@@ -46,7 +46,7 @@ func (s3BucketApi S3BucketApi) DownloadFile(objectKey string, fileName string) e
 func (s3BucketApi S3BucketApi) UploadVideoDir(videoDirPath string, prefix string) error {
 	walker := make(fileWalk)
 	go func() {
-		// Gather the files to upload by walking the path recursively
+		// Gather the files to videos by walking the path recursively
 		if err := filepath.Walk(videoDirPath, walker.Walk); err != nil {
 			log.Fatalln("Walk failed:", err)
 		}
@@ -74,7 +74,7 @@ func (s3BucketApi S3BucketApi) UploadVideoDir(videoDirPath string, prefix string
 			Body:   file,
 		})
 		if err != nil {
-			log.Fatalln("Failed to upload", path, err)
+			log.Fatalln("Failed to videos", path, err)
 		}
 		log.Println("Uploaded", path, result.ResultMetadata)
 	}

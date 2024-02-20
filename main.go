@@ -51,6 +51,6 @@ func main() {
 		fmt.Printf("Error while transcoding err: %v", err)
 	}
 
-	// upload back to s3
+	// videos back to s3
 	err = s3BucketApi.UploadVideoDir(outputDir, s3Dir)
 }
