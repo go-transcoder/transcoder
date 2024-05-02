@@ -145,8 +145,10 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 	}
 
 	// Dispatch the event
+	KAFKATOPIC := os.Getenv("KAFKATOPIC")
 	event := events.VideoHasBeenTranscoded{
 		EventService: eventService,
+		Topic:        KAFKATOPIC,
 		VideoTitle:   v.Title,
 	}
 	err = event.Dispatch()
