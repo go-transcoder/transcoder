@@ -4,6 +4,9 @@ WORKDIR /app
 COPY . .
 RUN go build -o transcoder .
 
+# stage 2 migrations
+FROM migrate/migrate as migrate
+
 FROM alpine:latest as host
 
 RUN apk update
@@ -13,11 +16,13 @@ RUN apk add --no-cache ffmpeg
 RUN mkdir /scripts
 
 COPY --from=builder /app/transcoder /
-COPY resources/app/convert_video_cpu.sh /convert_video_cpu.sh
+COPY --from=migrate /migrate /usr/local/bin/migrate
+COPY ./migrations /migrations
+
+COPY ./docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 WORKDIR /
-
-RUN chmod +x convert_video_cpu.sh
 
 #ENV AWS_ACCESS_KEY_ID=test
 #ENV AWS_SECRET_ACCESS_KEY=test
@@ -25,6 +30,13 @@ ENV AWS_REGION=us-east-1
 ENV STORAGE_PATH=/tmp
 ENV INPUT_S3_BUCKET=bucket-name
 ENV OBJECT_NAME=test.mp4
-ENV CONVERT_FFMPEG_SCRIPT_PATH=/convert_video_cpu.sh
 
+ENV DBUSER="test"
+ENV DBPASS="password"
+ENV DBHOST="localhost"
+ENV DBPORT="5432"
+ENV DBNAME="test"
+ENV SSLMODE="disable"
+
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/transcoder"]
