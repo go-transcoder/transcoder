@@ -2,6 +2,7 @@ package events
 
 import (
 	"encoding/json"
+	"os"
 )
 
 type VideoHasBeenTranscoded struct {
@@ -17,7 +18,9 @@ func (v *VideoHasBeenTranscoded) Dispatch() error {
 
 	jsonData, _ := json.Marshal(data)
 
-	err := v.EventService.Publish(jsonData, "video-transcoded")
+	KAFKATOPIC := os.Getenv("KAFKATOPIC")
+
+	err := v.EventService.Publish(jsonData, KAFKATOPIC)
 
 	if err != nil {
 		return err
