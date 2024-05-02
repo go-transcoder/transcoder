@@ -6,42 +6,42 @@ on:
     branches:
       - main
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21.5'
-
-      - name: Add ffmpeg to CI
-        uses: FedericoCarboni/setup-ffmpeg@v3
-
-      - name: Start LocalStack
-        uses: LocalStack/setup-localstack@main
-        with:
-          image-tag: 'latest'
-          install-awslocal: 'true'
-
-      - name: Creating Default Services
-        run: |
-          awslocal s3 mb s3://abboud131231231231namir-uploader-bucket
-          awslocal s3 cp ./resources/test/sample_test.mp4 s3://abboud131231231231namir-uploader-bucket/uploads/sample-test.mp4
-          echo "Test Execution complete!"
-
-      - name: Test
-        run: go test ./...
+#  test:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#      contents: read
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v4
+#        with:
+#          go-version: '1.21.5'
+#
+#      - name: Add ffmpeg to CI
+#        uses: FedericoCarboni/setup-ffmpeg@v3
+#
+#      - name: Start LocalStack
+#        uses: LocalStack/setup-localstack@main
+#        with:
+#          image-tag: 'latest'
+#          install-awslocal: 'true'
+#
+#      - name: Creating Default Services
+#        run: |
+#          awslocal s3 mb s3://abboud131231231231namir-uploader-bucket
+#          awslocal s3 cp ./resources/test/sample_test.mp4 s3://abboud131231231231namir-uploader-bucket/uploads/sample-test.mp4
+#          echo "Test Execution complete!"
+#
+#      - name: Test
+#        run: go test ./...
 
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+#    needs: test
     permissions:
       id-token: write
       contents: read

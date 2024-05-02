@@ -1,0 +1,31 @@
+version: '3.0'
+
+services:
+  db:
+    container_name: 'ours-transcoding-db'
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test
+    ports:
+      - "5433:5432"
+    networks:
+      transcoding-app:
+        aliases:
+          - transcoding-db
+
+  migrate:
+    container_name: 'ours-transcoder-migrate'
+    image: migrate/migrate
+    command: [ "-path=/migrations/", "-database", "postgres://postgres:password@transcoding-db:5432/test?sslmode=disable", "up" ]
+    depends_on:
+      - db
+    volumes:
+      - ./migrations:/migrations
+    networks:
+      transcoding-app:
+
+networks:
+  transcoding-app:
+    external: true
