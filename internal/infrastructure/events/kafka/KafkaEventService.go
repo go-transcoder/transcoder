@@ -10,10 +10,10 @@ type EventService struct {
 	writer *kafka.Writer
 }
 
-func NewKafkaEventService(address string) *EventService {
+func NewKafkaEventService(address []string) *EventService {
 	return &EventService{
 		writer: &kafka.Writer{
-			Addr: kafka.TCP(address),
+			Addr: kafka.TCP(address[0]), // TODO: put all the addresses
 		},
 	}
 }

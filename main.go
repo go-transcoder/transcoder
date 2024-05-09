@@ -13,6 +13,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -42,7 +43,7 @@ func main() {
 
 	// KAFKA
 	KAFKAHOST := os.Getenv("KAFKAHOST")
-	eventService := kafka.NewKafkaEventService(KAFKAHOST)
+	eventService := kafka.NewKafkaEventService(strings.Split(KAFKAHOST, ","))
 
 	// AWS
 	cfg, err := config.LoadDefaultConfig(context.TODO())
