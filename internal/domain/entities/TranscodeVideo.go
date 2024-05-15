@@ -93,6 +93,7 @@ func (v *TranscodeVideo) GetS3StoragePath() string {
 func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.EventService) error {
 
 	// Download
+	fmt.Println("File Download")
 	err := videos_lib.DownloadFile(*dto.S3Cfg, dto.S3Bucket, v.Path, v.GetDownloadLocalPath())
 
 	if err != nil {
@@ -103,6 +104,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 	v.SetIsDownloaded()
 
 	// Transcode
+	fmt.Println("File Transcode")
 	err = videos_lib.FfmpegTranscode(v.GetDownloadLocalPath(), v.GetTranscodeLocalPath())
 
 	if err != nil {
@@ -110,6 +112,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 		return err
 	}
 
+	fmt.Println("Create Smil")
 	err = videos_lib.CreateSmil(v.GetTranscodeLocalPath())
 
 	if err != nil {
@@ -117,6 +120,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 		return err
 	}
 
+	fmt.Println("Create Thumbnails")
 	err = videos_lib.ExtractThumbnails(v.GetDownloadLocalPath(), v.GetTranscodeLocalPath())
 
 	if err != nil {
@@ -127,6 +131,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 	v.SetIsTranscoded()
 
 	// Upload
+	fmt.Println("Upload dir")
 	err = videos_lib.UploadVideoDir(*dto.S3Cfg, dto.S3Bucket, v.GetTranscodeLocalPath(), v.GetS3StoragePath())
 
 	if err != nil {
@@ -137,6 +142,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 	v.SetIsUploaded()
 
 	// Delete original file
+	fmt.Println("Delete Origin File")
 	err = videos_lib.DeleteFile(*dto.S3Cfg, dto.S3Bucket, v.Path)
 
 	if err != nil {
@@ -145,6 +151,7 @@ func (v *TranscodeVideo) Transcode(dto *dtos.BucketConfDto, eventService events.
 	}
 
 	// Dispatch the event
+	fmt.Println("Triggering the kafka event")
 	KAFKATOPIC := os.Getenv("KAFKATOPIC")
 	event := events.VideoHasBeenTranscoded{
 		EventService: eventService,
